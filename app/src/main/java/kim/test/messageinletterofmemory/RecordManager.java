@@ -74,6 +74,7 @@ public class RecordManager extends Thread {
             }
             Message message = mHandler.obtainMessage(RecordHandler.RECORD_END, fileName);
             mHandler.sendMessage(message);
+            fileName = null;//파일명 초기화
         }
     }
 }

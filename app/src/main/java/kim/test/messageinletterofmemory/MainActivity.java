@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 case RECORD_END://녹음 종료
                     showDialog(msg.obj+"이 저장되었습니다");
                     recordTimerText.setText("");
+                    isRecording = false;//녹음이 완료됐으므로 다시 false로 변환
                     break;
             }
             super.handleMessage(msg);
