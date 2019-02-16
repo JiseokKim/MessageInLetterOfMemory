@@ -6,7 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 public class TimerThread extends Thread {
-    int sec;
+    private int sec;
     private RecordHandler mHandler;
     public TimerThread(Handler mHandler){
         this.mHandler = (RecordHandler) mHandler;
@@ -28,6 +28,8 @@ public class TimerThread extends Thread {
                 e.printStackTrace();
             }
         }
-        mHandler.sendEmptyMessage(RecordHandler.TIMER_END);
+        if(sec == 0) {//타이머가 정상적으로 종료되었을 때
+            mHandler.sendEmptyMessage(RecordHandler.TIMER_END);
+        }
     }
 }

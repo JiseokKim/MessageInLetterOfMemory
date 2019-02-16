@@ -3,9 +3,12 @@ package kim.test.messageinletterofmemory;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RecordManager extends Thread {
     private MediaRecorder recorder;
@@ -16,7 +19,6 @@ public class RecordManager extends Thread {
     private final int recordTimeSec = 15;
     public RecordManager(Handler mHandler){
         this.mHandler = (RecordHandler) mHandler;
-        recodeTimer = new TimerThread(mHandler);
     }
     public void run(){
 
@@ -28,7 +30,10 @@ public class RecordManager extends Thread {
         try {
             //지정된 파일이름이 없으면 현재시간으로 파일이름 지정
             if (fileName == null) {
-                fileName = "Record_Test.3gp";
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");//시간표시 포멧 지정
+                fileName = "record_"+dateFormat.format(date)+".3gp";
             }
             file = Environment.getExternalStorageDirectory();
             String path = file.getAbsolutePath() +"/Download/"+fileName;
@@ -49,6 +54,9 @@ public class RecordManager extends Thread {
             setRecorderInitialize();
             recorder.prepare();//녹음 준비 완료되면
             recorder.start();//녹음 시작
+            if(recodeTimer == null) {
+                recodeTimer = new TimerThread(mHandler);
+            }
             recodeTimer.setTimerSecond(recordTimeSec);
             recodeTimer.start();
         } catch (IOException e) {
@@ -60,7 +68,12 @@ public class RecordManager extends Thread {
             recorder.stop();//녹음 중단
             recorder.release();//녹음에 할당된 메모리 해제
             recorder = null;
-            mHandler.sendEmptyMessage(RecordHandler.RECORD_END);
+            if(recodeTimer!=null){
+                recodeTimer.setTimerSecond(-1);//타이머 강제종료
+                recodeTimer = null;
+            }
+            Message message = mHandler.obtainMessage(RecordHandler.RECORD_END, fileName);
+            mHandler.sendMessage(message);
         }
     }
 }

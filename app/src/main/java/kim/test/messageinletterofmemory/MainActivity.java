@@ -30,22 +30,22 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 1://타이머가 시작되었을 때
+                case TIMER_WORKING://타이머가 시작되었을 때
                     Resources res = getResources();
                     String timerText = res.getString(R.string.timer_text,(int)msg.obj);
                     recordTimerText.setText(timerText);
                     Log.d("Handler", timerText);
                     break;
-                case 2://타이머가 종료되었을 때
-                case 3://녹음 중지 버튼을 눌렀을 때
+                case TIMER_END://타이머가 종료되었을 때
+                case RECORD_STOP://녹음 중지 버튼을 눌렀을 때
                     recordManager.recordStop();
                     //showDialog("녹음이 종료되었습니다.");
                     break;
-                case 4://녹음 시작 버튼을 눌렀을 때
+                case RECORD_START://녹음 시작 버튼을 눌렀을 때
                     recordManager.recordStart();
                     break;
-                case 5://녹음 종료
-                    showDialog("녹음이 완료되었습니다");
+                case RECORD_END://녹음 종료
+                    showDialog(msg.obj+"이 저장되었습니다");
                     recordTimerText.setText("");
                     break;
             }
@@ -81,16 +81,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.record_button://녹음 시작, 녹음 시작 중 누르면 녹음 중지
-                showToast(mContext, message);
-                message = "녹음종료"+count;
-                count++;
+//                count++;
                 if(!isRecording){
                     mHandler.sendEmptyMessage(RecordHandler.RECORD_START);
                     isRecording = true;
+                    message = "녹음시작";
                 }else{
                     mHandler.sendEmptyMessage(RecordHandler.RECORD_STOP);
                     isRecording = false;
+                    message = "녹음종료";
                 }
+                showToast(mContext, message);
                 break;
         }
     }
