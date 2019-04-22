@@ -3,8 +3,10 @@ package kim.test.messageinletterofmemory;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
@@ -19,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
+    static final String TAG = "MainActivity";
     String message ="녹음시작";
     int count = 0;
     private Toast mToast;
     private Context mContext;
+    private View topMenuView;
     private TextView recordTimerText;
     private RecordManager recordManager;
     private boolean isRecording = false;
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate");
+        topMenuView = findViewById(R.id.top_menu_bar);
         ImageButton recordButton = findViewById(R.id.record_button);
         recordTimerText = findViewById(R.id.record_timer);
         recordButton.setOnClickListener(this);
@@ -73,8 +79,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},0);
         }
-
-
+        //FileListActivity move button event
+        ImageButton fileListButton = topMenuView.findViewById(R.id.file_list_btn);
+        fileListButton.setOnClickListener(this);
 
     }
 
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.record_button://녹음 시작, 녹음 시작 중 누르면 녹음 중지
+                Log.d(TAG, "recording button click");
 //                count++;
                 if(!isRecording){
                     mHandler.sendEmptyMessage(RecordHandler.RECORD_START);
@@ -93,6 +101,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     message = "녹음종료";
                 }
                 showToast(mContext, message);
+                break;
+            case R.id.file_list_btn:
+                Log.d(TAG, "file list button click");
+                Intent intent = new Intent(MainActivity.this, FileLIstActivity.class);
+                startActivity(intent);
                 break;
         }
     }

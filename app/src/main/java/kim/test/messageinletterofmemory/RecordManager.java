@@ -36,7 +36,7 @@ public class RecordManager extends Thread {
                 fileName = "record_"+dateFormat.format(date)+".3gp";
             }
             file = Environment.getExternalStorageDirectory();
-            String path = file.getAbsolutePath() +"/Download/"+fileName;
+            String path = file.getAbsolutePath() +File.separator+"VoiceMemory"+File.separator+fileName;
             recorder = new MediaRecorder();
             //녹음할 오디오 소스는 VOIP설정을 적용한다.
             recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
