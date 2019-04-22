@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/top_menu_height"
+    android:background="@color/colorPrimary"
+    android:weightSum="10">
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/file_list_btn"
+        android:layout_weight="2"
+        android:src="@drawable/ic_featured_play_list_black_24dp"
+        tools:text="folder"
+        tools:textSize="40sp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:textAlignment="center"
+        tools:text="15sec recoder"
+        tools:textSize="35sp"/>
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/add_bgm_btn"
+        android:layout_weight="2"
+        android:src="@drawable/ic_library_music_black_24dp"
+        tools:text="addBGM"
+        tools:textSize="40sp"/>
+</LinearLayout>
